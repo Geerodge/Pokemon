@@ -12,7 +12,6 @@ export default function PokemonSearch() {
     const data = await response.json();
     // Store Pokemon data
     setPokemonData([data]);
-    console.log(data);
   }
 
   // Error handler
@@ -27,15 +26,25 @@ export default function PokemonSearch() {
 
   // Deals with form actions
   function handleChange(e) {
-    setPokemon(e.target.value);
+    setPokemon(e.target.value.toLowerCase());
   }
   function handleSubmit(e) {
     e.preventDefault();
     fetchPokemon(name).catch(handleError);
   }
 
+  // Transforms the first character of a string to uppercase and replaces - with a space
+  function humanize(str) {
+    var i, frags = str.split('-');
+    for (i=0; i<frags.length; i++) {
+      frags[i] = frags[i].charAt(0).toUpperCase() + frags[i].slice(1);
+    }
+    return frags.join(' ');
+  }
+
   return(
     <>
+      <h2>Pokemon Search</h2>
       <form onSubmit={handleSubmit}>
           <input 
               type="text"
@@ -43,24 +52,42 @@ export default function PokemonSearch() {
               onChange={handleChange}
           />
       </form>
-      {/* Maps over the data array to display Pokemon information */}
+      {/* Maps over the data to display Pokemon information */}
       {pokemonData.map((data) => {
         return(
           <div key={data.id}>
-            <h2>{data.name}</h2>
-            <p>{data.sprites.front_default}</p>
-            <p>{data.types[0].type.name}</p>
+            <h2>{humanize(data.name)}</h2>
+            <img 
+              src={data.sprites.front_default}
+              alt={data.name}
+              // Be a shiny Pokemon on mouse hover :)
+              onMouseOver={e => (e.currentTarget.src = data.sprites.front_shiny)}
+              onMouseOut={e => (e.currentTarget.src = data.sprites.front_default)}
+            />
+            <h3>Type</h3>
+            <p>{humanize(data.types[0].type.name)}</p>
+            <h3>Height</h3>
             {/* Converts height from decimeters to centimeters */}
             <p>{Math.round(data.height) * 10} cm</p>
+            <h3>Weight</h3>
             {/* Converts weight from hectograms to kilograms */}
             <p>{Math.round(data.weight) * 0.1} kg</p>
             <h3>Stats</h3>
-            {/* Loops through the stats array */}
-            {data.stats.map((data) => {
+            {/* Maps through the stats */}
+            {data.stats.map((data, index) => {
               return(
-                <p key={data.stat.name.toString()}>{data.stat.name}: {data.base_stat}</p>
+                <p key={index}>{humanize(data.stat.name)}: {data.base_stat}</p>
               )
             })}
+            <h3>Abilities</h3>
+            <ul>
+              {/* Maps through the abilities */}
+              {data.abilities.map((data, index) => {
+                return(
+                    <li key={index}>{humanize(data.ability.name)}</li>
+                    )
+                  })}
+            </ul>
           </div>
         )
         })}
