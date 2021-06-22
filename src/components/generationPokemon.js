@@ -4,7 +4,8 @@ import fetch from 'node-fetch';
 export default function PokemonSearch() {
     // Pokemon Endpoints
     const generationEndpoint = "https://pokeapi.co/api/v2/generation";
-  
+    const nameEndpoint = "https://pokeapi.co/api/v2/pokemon";
+
     // Fetch Pokemon by generation id
     async function fetchPokemon(id) {
         const response = await fetch(`${generationEndpoint}/${id}`);
@@ -14,6 +15,15 @@ export default function PokemonSearch() {
         // Lets us know state changed/data is loaded
         setPokemonDataLoaded(true);
         console.log(data);
+    }
+
+    // Fetch Pokemon
+    async function fetchPokemonName(name) {
+    // Fetch Pokemon by name
+        const response = await fetch(`${nameEndpoint}/${name}`);
+        const data = await response.json();
+        // Store Pokemon data
+        setPokemonData([data]);
     }
 
     // Error handler
@@ -41,6 +51,14 @@ export default function PokemonSearch() {
     // Set initial state before data is available
     const [pokemonDataLoaded, setPokemonDataLoaded] = useState(false);
 
+
+    // Array to store pokemon names from dropdown action
+    let pokemonNames = [];
+
+    // Need to wait for pokemonNames to update after map method completed below, probably using a proimise or aysnc/await.
+    // Then need to fetch again from API using these names to get the images and pokemon data.
+
+
   return(
     <>
         <h2>Filter By Generation</h2>
@@ -56,6 +74,7 @@ export default function PokemonSearch() {
             <option value="8">Generation 8</option>
         </select>
         {pokemonDataLoaded ? pokemonData.pokemon_species.map((data, index) => {
+            // pokemonNames.forEach(data.name);
             return (
                 <h3 key={index}>{humanize(data.name)}</h3>
             )
