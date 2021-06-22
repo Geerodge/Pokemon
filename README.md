@@ -54,12 +54,3 @@ This project is licensed under the BSD Zero Clause License (0BSD) - see the [LIC
 
 
 
-
-    A brief "Getting Started guide" on how to open the project locally
-    If you used any particular libraries why did you choose them?
-    Did you have any challenges and if so, how did you overcome them?
-    Did you add any extra features?
-    If you had more time, what else would you implement?
-
-
-
