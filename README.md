@@ -2,7 +2,7 @@
     <img alt="Gatsby" src="https://www.svgrepo.com/show/276264/pokeball-pokemon.svg" width="60" />
 </p>
 <h1 align="center">
-  3SC Web Developer Test
+  Pokemon API
 </h1>
 
 ## Getting Started
